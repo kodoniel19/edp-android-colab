@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,10 +40,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MaterialTheme {
+            BusinessCardTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Brand.Background
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     BusinessCard()
                 }
@@ -51,16 +52,63 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun BusinessCardTheme(
+    darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colorScheme = if (darkTheme) {
+        androidx.compose.material3.darkColorScheme(
+            primary = Color(0xFFFFB4AB), // Lighter red for dark mode
+            background = Color(0xFF1A1C1E),
+            surface = Color(0xFF222427),
+            onPrimary = Color(0xFF690005),
+            onBackground = Color(0xFFE2E2E6),
+            onSurface = Color(0xFFE2E2E6),
+            secondary = Color(0xFFD4AF37) // Accent
+        )
+    } else {
+        androidx.compose.material3.lightColorScheme(
+            primary = Brand.Primary,
+            background = Brand.Background,
+            surface = Brand.CardBackground,
+            onPrimary = Color.White,
+            onBackground = Color.Black,
+            onSurface = Color.Black,
+            secondary = Brand.Accent
+        )
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        content = content
+    )
+}
+
 object Brand {
+    // Colors
     val Background = Color(0xFFF4F4F4)
     val Primary = Color(0xFF800000)
     val Accent = Color(0xFFD4AF37)
-    val Card = Color.White
+    val CardBackground = Color.White
+    val SecondaryText = Color.Gray
 
+    // Sizes & Spacing
     val AvatarSize = 140.dp
+    val AvatarBorder = 4.dp
     val CardPadding = 24.dp
+    val CardInnerPadding = 24.dp
     val CardElevation = 8.dp
     val CornerRadius = 20.dp
+    val SpacingSmall = 12.dp
+    val SpacingMedium = 20.dp
+    val SpacingLarge = 30.dp
+    val IconSpacing = 15.dp
+
+    // Typography
+    val TitleSize = 30.sp
+    val SubtitleSize = 18.sp
+    val BodySize = 18.sp
 }
 
 @Composable
@@ -69,7 +117,7 @@ fun BusinessCard() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brand.Background)
+            .background(MaterialTheme.colorScheme.background)
             .padding(Brand.CardPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -78,7 +126,7 @@ fun BusinessCard() {
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Brand.Card
+                containerColor = MaterialTheme.colorScheme.surface
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = Brand.CardElevation
@@ -89,7 +137,7 @@ fun BusinessCard() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
+                    .padding(Brand.CardInnerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
@@ -100,54 +148,56 @@ fun BusinessCard() {
                         .size(Brand.AvatarSize)
                         .clip(CircleShape)
                         .border(
-                            4.dp,
-                            Brand.Accent,
+                            Brand.AvatarBorder,
+                            MaterialTheme.colorScheme.secondary,
                             CircleShape
                         ),
                     contentScale = ContentScale.Crop
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(Brand.SpacingMedium))
 
                 Text(
                     text = "Doniel Eunson Ko",
-                    fontSize = 30.sp,
+                    fontSize = Brand.TitleSize,
                     fontWeight = FontWeight.Bold,
-                    color = Brand.Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
                     text = "BS Information Technology Student",
-                    fontSize = 18.sp,
-                    color = Color.Gray
+                    fontSize = Brand.SubtitleSize,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
 
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(Brand.SpacingLarge))
 
                 ContactRow(
                     icon = Icons.Default.Phone,
                     text = "+63 919 927 6060",
                     onClickLabel = "Call Phone"
                 ) {
-                    // Future call action
+                    // Action stub for calling
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Brand.SpacingSmall))
 
                 ContactRow(
                     icon = Icons.Default.Email,
                     text = "deko74415@liceo.edu.ph",
                     onClickLabel = "Send Email"
                 ) {
+                    // Action stub for emailing
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Brand.SpacingSmall))
 
                 ContactRow(
                     icon = Icons.Default.Person,
                     text = "github.com/kodoniel19",
                     onClickLabel = "Visit Profile"
                 ) {
+                    // Action stub for visiting profile
                 }
 
             }
@@ -157,7 +207,7 @@ fun BusinessCard() {
 
 @Composable
 fun ContactRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     text: String,
     onClickLabel: String,
     onClick: () -> Unit
@@ -178,15 +228,16 @@ fun ContactRow(
 
         Icon(
             imageVector = icon,
-            contentDescription = text,
-            tint = Brand.Primary
+            contentDescription = null, // Accessibility handled by onClickLabel and Text
+            tint = MaterialTheme.colorScheme.primary
         )
 
-        Spacer(modifier = Modifier.width(15.dp))
+        Spacer(modifier = Modifier.width(Brand.IconSpacing))
 
         Text(
             text = text,
-            fontSize = 18.sp
+            fontSize = Brand.BodySize,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -198,7 +249,7 @@ fun ContactRow(
 )
 @Composable
 fun BusinessCardPreview() {
-    MaterialTheme {
+    BusinessCardTheme {
         BusinessCard()
     }
 }
@@ -211,7 +262,7 @@ fun BusinessCardPreview() {
 )
 @Composable
 fun BusinessCardDarkPreview() {
-    MaterialTheme {
+    BusinessCardTheme {
         BusinessCard()
     }
 }
@@ -224,7 +275,7 @@ fun BusinessCardDarkPreview() {
 )
 @Composable
 fun BusinessCardLargeFontPreview() {
-    MaterialTheme {
+    BusinessCardTheme {
         BusinessCard()
     }
 }
