@@ -153,8 +153,8 @@ fun ProfileScreen() {
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    ContactInfoItem(Icons.Default.Email, "ada@compute.org")
-                    ContactInfoItem(Icons.Default.LocationOn, "London, United Kingdom")
+                    ContactInfoItem(Icons.Default.Email, "deko74415@liceo.edu.ph")
+                    ContactInfoItem(Icons.Default.LocationOn, "Zone 6 Carmen, Cagayan de Oro City, Philippines")
                 }
             }
         }
