@@ -14,128 +14,145 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @Composable
 fun ProfileScreen() {
-    // Using theme colors instead of hard-coded blue/white for dark mode support
-    val backgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-    val cardColor = MaterialTheme.colorScheme.surface
+    val surfaceColor = MaterialTheme.colorScheme.surface
     val primaryColor = MaterialTheme.colorScheme.primary
-    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
-    val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val secondaryContainer = MaterialTheme.colorScheme.secondaryContainer
 
-    Column(
+    // Root Container with a subtle gradient background for a premium feel
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Task 2 — Circular avatar with profile photo
-        Box(
-            modifier = Modifier
-                .size(140.dp)
-                .clip(CircleShape)
-                .background(cardColor)
-                .border(4.dp, primaryColor, CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.profile_photo),
-                contentDescription = "Profile Photo",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                        MaterialTheme.colorScheme.background
+                    )
+                )
             )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Task 3 — Full name & subtitle (Centered)
-        Text(
-            text = "Doniel Eunson Ko",
-            style = MaterialTheme.typography.headlineMedium,
-            color = primaryColor,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Spacer(modifier = Modifier.height(4.dp))
-        
-        Text(
-            text = "BSIT 3-1",
-            style = MaterialTheme.typography.titleMedium,
-            color = onSurfaceVariantColor
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // Task 4 — The Info Card
-        Card(
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = cardColor
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, primaryColor.copy(alpha = 0.2f))
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
+            // --- Header Section: Avatar & Name ---
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(bottom = 24.dp)
             ) {
-                // Task 5 — Reusable InfoRows
-                InfoRow(icon = Icons.Default.Person, label = "Full Name", value = "Doniel Eunson Ko")
-                InfoDivider()
-                InfoRow(icon = Icons.Default.School, label = "Course", value = "Bachelor of Science in IT")
-                InfoDivider()
-                InfoRow(icon = Icons.Default.Class, label = "Section", value = "3-1")
-                InfoDivider()
-                InfoRow(icon = Icons.Default.Phone, label = "Mobile Number", value = "+63 919 927 6060")
-                InfoDivider()
-                InfoRow(icon = Icons.Default.Email, label = "Email Address", value = "deko74415@liceo.edu.ph")
+                // Outer decorative ring
+                Box(
+                    modifier = Modifier
+                        .size(160.dp)
+                        .border(1.dp, primaryColor.copy(alpha = 0.3f), CircleShape)
+                )
+                
+                // Profile Image Container
+                Surface(
+                    modifier = Modifier
+                        .size(140.dp)
+                        .shadow(12.dp, CircleShape),
+                    shape = CircleShape,
+                    color = surfaceColor,
+                    border = androidx.compose.foundation.BorderStroke(4.dp, surfaceColor)
+                ) {
+                    Box(modifier = Modifier.fillMaxSize().border(2.dp, primaryColor, CircleShape)) {
+                        Image(
+                            painter = painterResource(id = R.drawable.profile_photo),
+                            contentDescription = "Profile Photo",
+                            modifier = Modifier.fillMaxSize().clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
+
+            Text(
+                text = "Doniel Eunson Ko",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 0.5.sp
+                ),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            
+            Surface(
+                color = secondaryContainer,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text(
+                    text = "BSIT 3-1",
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // --- Info Card Section ---
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(16.dp, RoundedCornerShape(28.dp)),
+                shape = RoundedCornerShape(28.dp),
+                colors = CardDefaults.cardColors(containerColor = surfaceColor),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    InfoRow(icon = Icons.Default.Person, label = "FULL NAME", value = "Doniel Eunson Ko")
+                    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    InfoRow(icon = Icons.Default.School, label = "COURSE", value = "Bachelor of Science in IT")
+                    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    InfoRow(icon = Icons.Default.Class, label = "SECTION", value = "3-1")
+                    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    InfoRow(icon = Icons.Default.Phone, label = "MOBILE NUMBER", value = "+63 919 927 6060")
+                    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    InfoRow(icon = Icons.Default.Email, label = "EMAIL ADDRESS", value = "deko74415@liceo.edu.ph")
+                }
             }
         }
     }
 }
 
 @Composable
-fun InfoDivider() {
-    HorizontalDivider(
-        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 52.dp),
-        thickness = 0.5.dp,
-        color = MaterialTheme.colorScheme.outlineVariant
-    )
-}
-
-@Composable
 fun InfoRow(icon: ImageVector, label: String, value: String) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Icon Box (Theme aware)
+        // Styled Icon container
         Surface(
-            modifier = Modifier.size(36.dp),
-            shape = RoundedCornerShape(8.dp),
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-            border = androidx.compose.foundation.BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+            modifier = Modifier.size(42.dp),
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -146,47 +163,39 @@ fun InfoRow(icon: ImageVector, label: String, value: String) {
         Column {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp
+                ),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.SemiBold
             )
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, name = "Blue Design — Light")
+@Preview(showBackground = true, showSystemUi = true, name = "Light Mode")
 @Composable
 fun ProfilePreview() {
     MyApplicationTheme(darkTheme = false, dynamicColor = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            ProfileScreen()
-        }
+        ProfileScreen()
     }
 }
 
 @Preview(
     showBackground = true,
     showSystemUi = true,
-    name = "Blue Design — Dark",
+    name = "Dark Mode",
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 fun ProfileDarkPreview() {
     MyApplicationTheme(darkTheme = true, dynamicColor = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            ProfileScreen()
-        }
+        ProfileScreen()
     }
 }
