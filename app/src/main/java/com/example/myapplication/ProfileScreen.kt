@@ -31,7 +31,6 @@ fun ProfileScreen() {
     val primaryColor = MaterialTheme.colorScheme.primary
     val secondaryContainer = MaterialTheme.colorScheme.secondaryContainer
 
-    // Root Container with a subtle gradient background for a premium feel
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,19 +50,16 @@ fun ProfileScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // --- Header Section: Avatar & Name ---
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.padding(bottom = 24.dp)
             ) {
-                // Outer decorative ring
                 Box(
                     modifier = Modifier
                         .size(160.dp)
                         .border(1.dp, primaryColor.copy(alpha = 0.3f), CircleShape)
                 )
-                
-                // Profile Image Container
+
                 Surface(
                     modifier = Modifier
                         .size(140.dp)
@@ -108,7 +104,6 @@ fun ProfileScreen() {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- Info Card Section ---
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,7 +137,6 @@ fun InfoRow(icon: ImageVector, label: String, value: String) {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Styled Icon container
         Surface(
             modifier = Modifier.size(42.dp),
             shape = RoundedCornerShape(12.dp),
