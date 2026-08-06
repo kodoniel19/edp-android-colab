@@ -62,7 +62,10 @@ fun GreetingApp() {
             }
             composable<Greeting> { backStackEntry ->
                 val greeting: Greeting = backStackEntry.toRoute()
-                GreetingScreen(userName = greeting.userName)
+                GreetingScreen(
+                    userName = greeting.userName,
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }

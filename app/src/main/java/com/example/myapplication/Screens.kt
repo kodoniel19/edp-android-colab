@@ -83,7 +83,7 @@ fun HomeScreen(onShowGreeting: (String) -> Unit) {
 }
 
 @Composable
-fun GreetingScreen(userName: String) {
+fun GreetingScreen(userName: String, onBack: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -127,6 +127,16 @@ fun GreetingScreen(userName: String) {
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                 )
+
+                Spacer(Modifier.height(24.dp))
+
+                OutlinedButton(
+                    onClick = onBack,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Go Back")
+                }
             }
         }
     }
